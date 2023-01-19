@@ -103,7 +103,7 @@ public class FileSystemStorageService implements StorageService {
 		if (!path.getParent().equals(rootLocation.resolve(fileType.subDirectory).toAbsolutePath())) {
             throw new StorageException("Cannot delete file outside current directory.");
         }
-
+		
 		return path;
 	}
 
@@ -136,6 +136,10 @@ public class FileSystemStorageService implements StorageService {
 
 	@Override
 	public void deleteAll() {
-		FileSystemUtils.deleteRecursively(rootLocation.toFile());
+		try {
+			FileUtils.cleanDirectory(rootLocation.toFile());
+		} catch (IOException e) {
+			throw new StorageFileNotFoundException("Rootlocation not found: " + rootLocation.toString(), e);
+		}
 	}
 }
