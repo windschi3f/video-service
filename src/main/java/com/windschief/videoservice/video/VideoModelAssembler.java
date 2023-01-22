@@ -5,8 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.windschief.videoservice.VideoController;
-
 @Component
 public class VideoModelAssembler implements RepresentationModelAssembler<Video, VideoDTO> {
 
