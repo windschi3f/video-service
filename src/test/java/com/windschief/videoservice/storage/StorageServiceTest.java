@@ -24,7 +24,6 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @SpringJUnitConfig
-@TestInstance(Lifecycle.PER_CLASS)
 public class StorageServiceTest {
     private final String rootLocation = "/home/vinci/Videos/test";
     private final StorageProperties storageProperties = new StorageProperties(rootLocation);
@@ -35,7 +34,7 @@ public class StorageServiceTest {
         storageService.init();
     }
 
-    @AfterAll
+    @AfterEach
     void cleanUp() {
         FileSystemUtils.deleteRecursively(new File(rootLocation));
     }
@@ -59,7 +58,7 @@ public class StorageServiceTest {
         final MultipartFile testFile = new MockMultipartFile(
             filename,
             Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         
@@ -73,8 +72,8 @@ public class StorageServiceTest {
         final String filename = "testfile.txt";
         final MultipartFile testFile = new MockMultipartFile(
             filename,
-            Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            filename, 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         assertEquals("testfile.txt", storageService.store(testFile, FileType.VIDEO));
@@ -118,7 +117,7 @@ public class StorageServiceTest {
         final MultipartFile testFile = new MockMultipartFile(
             filename,
             Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         
@@ -138,7 +137,7 @@ public class StorageServiceTest {
         final MultipartFile testFile = new MockMultipartFile(
             filename,
             Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         
@@ -153,7 +152,7 @@ public class StorageServiceTest {
         final MultipartFile testFile = new MockMultipartFile(
             filename,
             Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         
@@ -172,7 +171,7 @@ public class StorageServiceTest {
         final MultipartFile testFile = new MockMultipartFile(
             filename,
             Paths.get(rootLocation, filename).toString(), 
-            "text/plain", 
+            MediaType.TEXT_PLAIN_VALUE, 
             "content".getBytes()
         );
         
