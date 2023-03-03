@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.time.Instant;
 
+import org.apache.commons.io.FilenameUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +42,11 @@ public class VideoServiceTest {
     @AfterEach
     void cleanUp() {
         FileSystemUtils.deleteRecursively(new File(rootLocation));
+        videoRepository.deleteAll();
     }
 
     @Test                                            
-    void givenStoredFile_whenSync_shouldCreatDbEntry() {
+    void givenStoredFile_whenSync_shouldCreateDbEntry() {
         //GIVEN
         final String filename = "testfile.txt";
         final MultipartFile testFile = new MockMultipartFile(
@@ -58,7 +61,25 @@ public class VideoServiceTest {
         videoService.syncDatabaseFromStorage();
 
         //THEN
-        assertTrue(videoRepository.findAll().stream().anyMatch(v -> v.getVideoName().equals("testfile")));
+        assertTrue(videoRepository.findAll().stream().anyMatch(v -> v.getVideoName().equals(FilenameUtils.getBaseName(filename))));
+    }
+
+    @Test                                            
+    void givenNoFileAndVideoDbEntry_whenSync_shouldDeleteDbEntry() {
+        //GIVEN
+        videoRepository.save(
+            Video.builder().withVideoName("test")
+                .withVideoFilename("test.mp4")
+                .withThumbnailFilename("test-thumbnail.png")
+                .withCreatedAt(Instant.now())
+                .build()
+        );
+
+        //WHEN
+        videoService.syncDatabaseFromStorage();
+
+        //THEN
+        assertEquals(0, videoRepository.count());
     }
 }
 

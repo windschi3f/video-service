@@ -51,12 +51,18 @@ public class VideoServiceImpl implements VideoService {
 
                 videoRepo.save(
                     Video.builder()
-                        .withVideoName(videoFilename)
+                        .withVideoName(FilenameUtils.getBaseName(videoFilename))
                         .withVideoFilename(videoFilename)
                         .withThumbnailFilename(FfmpegUtility.getThumbnailFilename(videoFilename))
                         .withCreatedAt(creationTime.toInstant())
                         .build()
                 );
+            }
+        }
+
+        for (Video video : videosDatabase) {
+            if (videoFilenames.stream().noneMatch(filename -> video.getVideoFilename().equals(filename))) {
+                videoRepo.delete(video);
             }
         }
     }
