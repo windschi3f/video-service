@@ -30,7 +30,7 @@ public class FfmpegUtility {
             throw new RuntimeException("Failed to generate Thumbnail for " + FilenameUtils.getName(filename), e);
         }
 
-        return generateThumbnail(filename);
+        return getThumbnailFilename(filename);
     }
 
     public static String getThumbnailFilename(String videoFilename) {
