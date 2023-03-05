@@ -19,18 +19,20 @@ public class FfmpegUtility {
 		this.rootLocation = Paths.get(properties.getLocation());
 	}
 
-    public String generateThumbnail(String filename) {
-        Path videoPath = Paths.get(rootLocation.toString(), FileType.VIDEO.subDirectory, FilenameUtils.getName(filename));
+    public Process generateThumbnail(String videoPath) {
+        String destination = rootLocation
+            .resolve(FileType.THUMBNAIL.subDirectory)
+            .resolve(getThumbnailFilename(videoPath))
+            .toString(); 
 
         try {
-            new ProcessBuilder("ffmpeg", "-i", videoPath.toString(), "-vf", "thumbnail", "-frames:v", "1", getThumbnailFilename(filename))
-                .directory(rootLocation.toFile())
-                .start();
+            ProcessBuilder pb = new ProcessBuilder("ffmpeg", "-i", videoPath, "-vf", "thumbnail", "-frames:v", "1", destination)
+                .directory(rootLocation.toFile());
+            pb.redirectErrorStream(true);
+            return pb.start();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to generate Thumbnail for " + FilenameUtils.getName(filename), e);
+            throw new RuntimeException("Failed to generate Thumbnail for " + FilenameUtils.getName(videoPath), e);
         }
-
-        return getThumbnailFilename(filename);
     }
 
     public static String getThumbnailFilename(String videoFilename) {

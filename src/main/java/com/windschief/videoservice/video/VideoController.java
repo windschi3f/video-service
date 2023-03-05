@@ -57,7 +57,8 @@ public class VideoController {
 	public ResponseEntity<VideoDTO> saveVideo(@RequestParam("file") MultipartFile file) {
         String videoFilename = storageService.store(file, FileType.VIDEO);
 
-        String thumbnailName = ffmpegUtility.generateThumbnail(videoFilename);
+		ffmpegUtility.generateThumbnail(videoFilename);
+        String thumbnailName = FfmpegUtility.getThumbnailFilename(videoFilename);
 
         Video video = videoRepo.save(
             Video.builder()
