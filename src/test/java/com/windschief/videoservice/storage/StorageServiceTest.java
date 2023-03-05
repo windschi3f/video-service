@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringJUnitConfig
 public class StorageServiceTest {
-    private final String rootLocation = "/home/vinci/Videos/test";
+    private final String rootLocation = "/home/vinci/videoservice/test/storage";
     private final StorageProperties storageProperties = new StorageProperties(rootLocation);
     private final StorageService storageService = new FileSystemStorageService(storageProperties);
 

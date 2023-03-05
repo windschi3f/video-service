@@ -25,7 +25,7 @@ import com.windschief.videoservice.storage.StorageService;
 
 @DataJpaTest
 public class VideoServiceTest {
-    private final String rootLocation = "/home/vinci/Videos/test";
+    private final String rootLocation = "/home/vinci/videoservice/test/videoservice";
     private final StorageProperties storageProperties = new StorageProperties(rootLocation);
     private final StorageService storageService = new FileSystemStorageService(storageProperties);
     private final FfmpegUtility ffmpegUtility = new FfmpegUtility(storageProperties);
